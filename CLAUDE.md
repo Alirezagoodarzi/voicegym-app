@@ -5,9 +5,9 @@ A voice-driven gym workout planner. Users speak exercise commands and the app
 parses them into structured workout plans using the Claude API.
 
 Voice command format: "[exercise name] on [equipment], [sets] sets, 
-[reps] reps, [rest] seconds rest"
+[reps] reps, [rest] seconds rest, [weight] kg/lbs"
 
-Example: "bench press on barbell, 4 sets, 8 reps, 90 seconds rest"
+Example: "bench press on barbell, 4 sets, 8 reps, 90 seconds rest, 80 kg"
 
 ## Tech Stack
 - Next.js 14 (App Router) + TypeScript
@@ -33,6 +33,8 @@ type Exercise = {
   sets: number
   reps: number
   restSeconds: number
+  weight: number
+  weightUnit: "kg" | "lbs"
 }
 
 type WorkoutPlan = {

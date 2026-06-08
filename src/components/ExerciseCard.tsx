@@ -67,6 +67,7 @@ export default function ExerciseCard({ exercise, index, onEdit }: ExerciseCardPr
       {onEdit && (
         <button
           onClick={(e) => { e.stopPropagation(); onEdit(); }}
+          onPointerDown={(e) => e.stopPropagation()}
           style={{
             background: "none",
             border: "none",

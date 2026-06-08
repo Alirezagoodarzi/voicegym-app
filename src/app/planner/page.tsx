@@ -18,6 +18,7 @@ export default function PlannerPage() {
   const addExercise = useWorkoutStore((s) => s.addExercise);
   const updateExercise = useWorkoutStore((s) => s.updateExercise);
   const deleteExercise = useWorkoutStore((s) => s.deleteExercise);
+  const reorderExercises = useWorkoutStore((s) => s.reorderExercises);
   const hydrate = useWorkoutStore((s) => s.hydrate);
 
   useEffect(() => {
@@ -94,6 +95,7 @@ export default function PlannerPage() {
           <WorkoutPlan
             plan={plan}
             onEditExercise={(exercise) => setEditingExercise(exercise)}
+            onReorder={reorderExercises}
           />
         </section>
 

@@ -14,6 +14,7 @@ type WorkoutStore = {
   addExercise: (exercise: Exercise) => void
   updateExercise: (exercise: Exercise) => void
   deleteExercise: (id: string) => void
+  reorderExercises: (exercises: Exercise[]) => void
   clearPlan: () => void
   hydrate: () => void
 }
@@ -46,6 +47,11 @@ export const useWorkoutStore = create<WorkoutStore>()(
             ...state.plan,
             exercises: state.plan.exercises.filter((ex) => ex.id !== id),
           },
+        }))
+      },
+      reorderExercises: (exercises: Exercise[]) => {
+        set((state) => ({
+          plan: { ...state.plan, exercises },
         }))
       },
       clearPlan: () => {
