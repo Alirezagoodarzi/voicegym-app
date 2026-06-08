@@ -183,22 +183,19 @@ console.log('ALi ALI:', 'ALiALiALi')
   };
 
   const handleSave = () => {
-    if (!form.name.trim() || !form.equipment.trim() || form.sets === "" || form.reps === "" || form.restSeconds === "") 
-    {
+    if (!form.name.trim() || !form.equipment.trim()) {
       return;
     }
     onSave({
       id: mode === "edit" && exercise ? exercise.id : crypto.randomUUID(),
       name: form.name.trim(),
       equipment: form.equipment.trim(),
-      equipmentId:
-        form.equipmentId ||
-        form.equipment.trim().toLowerCase().replace(/\s+/g, "-"),
-      sets: Number(form.sets),
-      reps: Number(form.reps),
-      restSeconds: Number(form.restSeconds),
-      weight: Number(form.weight),
-      weightUnit: form.weightUnit,
+      equipmentId: form.equipmentId || form.equipment.trim().toLowerCase().replace(/\s+/g, "-"),
+      sets: Number(form.sets) || 0,
+      reps: Number(form.reps) || 0,
+      restSeconds: Number(form.restSeconds) || 0,
+      weight: Number(form.weight) || 0,
+      weightUnit: form.weightUnit as "kg" | "lbs",
     });
   };
 

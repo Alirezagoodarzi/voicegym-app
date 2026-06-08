@@ -9,9 +9,9 @@ type ExerciseCardProps = {
 
 export default function ExerciseCard({ exercise, index, onEdit }: ExerciseCardProps) {
   const stats = [
-    { label: "SETS", value: exercise.sets },
-    { label: "REPS", value: exercise.reps },
-    { label: "REST", value: exercise.restSeconds },
+    { label: "SETS", value: exercise.sets ?? 0 },
+    { label: "REPS", value: exercise.reps ?? 0 },
+    { label: "REST", value: exercise.restSeconds ?? 0 },
   ];
 
   return (
