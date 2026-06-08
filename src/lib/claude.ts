@@ -97,17 +97,12 @@ export async function parseExerciseVoice(
   if (systemPrompt) {
     return parsed as Partial<Omit<Exercise, "id">>
   }
-
-  if (
-    typeof parsed.name !== "string" ||
-    typeof parsed.equipment !== "string" ||
-    typeof parsed.equipmentId !== "string" ||
-    typeof parsed.sets !== "number" ||
-    typeof parsed.reps !== "number" ||
-    typeof parsed.restSeconds !== "number"
-  ) {
-    throw new Error(`Invalid exercise fields in response: ${raw}`)
-  }
-
+if (
+  typeof parsed.name !== "string" ||
+  typeof parsed.equipment !== "string" ||
+  typeof parsed.equipmentId !== "string"
+) {
+  throw new Error(`Invalid exercise fields in response: ${raw}`)
+}
   return { ...parsed, id: crypto.randomUUID() }
 }
