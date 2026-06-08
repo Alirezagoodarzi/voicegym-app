@@ -301,7 +301,7 @@ console.log('ALi ALI:', 'ALiALiALi')
                 : "Re-record by voice"}
             </p>
             <p style={{ fontSize: "11px", color: "#4A4A4A" }}>
-              {micError || "Tap mic and speak the updated exercise"}
+              {micError || "Say any combination — e.g: 'sets 4 reps 8 rest 90' or just 'reps 10' or 'name bench press equipment barbell'"}
             </p>
           </div>
         </div>

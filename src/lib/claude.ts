@@ -11,38 +11,48 @@ export function parseExerciseVoicePartial(
   transcript: string
 ): Partial<Omit<Exercise, "id">> {
   const result: Partial<Omit<Exercise, "id">> = {}
-  const t = transcript.trim()
+  const t = transcript.trim().toLowerCase()
 
-  // Sets: "4 sets" / "4 set"
-  const setsMatch = t.match(/\b(\d+)\s*sets?\b/i)
-  if (setsMatch) result.sets = parseInt(setsMatch[1], 10)
+  const WORD_NUMBERS: Record<string, number> = {
+    one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7,
+    eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, fifteen: 15,
+    twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60,
+    ninety: 90, hundred: 100,
+  }
+  function toNumber(s: string): number {
+    return WORD_NUMBERS[s.toLowerCase()] ?? parseInt(s, 10)
+  }
 
-  // Reps: "8 reps" / "8 rep"
-  const repsMatch = t.match(/\b(\d+)\s*reps?\b/i)
-  if (repsMatch) result.reps = parseInt(repsMatch[1], 10)
+  // Sets: "sets 4" / "4 sets" / "sets four"
+  const setsMatch =
+    t.match(/\bsets?\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty)\b/i) ??
+    t.match(/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty)\s+sets?\b/i)
+  if (setsMatch) result.sets = toNumber(setsMatch[1])
 
-  // Rest: "90 seconds rest" / "90 seconds" / "90 sec" / "rest 90"
+  // Reps: "reps 8" / "8 reps" / "reps eight"
+  const repsMatch =
+    t.match(/\breps?\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty)\b/i) ??
+    t.match(/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty)\s+reps?\b/i)
+  if (repsMatch) result.reps = toNumber(repsMatch[1])
+
+  // Rest: "rest 90" / "90 seconds" / "rest ninety seconds"
   const restMatch =
-    t.match(/\b(\d+)\s*(?:seconds?|secs?)\b/i) ??
-    t.match(/\brest\s+(?:for\s+)?(\d+)\b/i)
-  if (restMatch) result.restSeconds = parseInt(restMatch[1], 10)
+    t.match(/\brest\s+(\d+|thirty|forty|fifty|sixty|ninety|hundred)\b/i) ??
+    t.match(/\b(\d+|thirty|forty|fifty|sixty|ninety|hundred)\s*(?:seconds?|secs?)\b/i)
+  if (restMatch) result.restSeconds = toNumber(restMatch[1])
 
-  // Equipment: text after "on" up to a comma, digit, or end
-  const equipMatch = t.match(/\bon\s+([a-zA-Z][a-zA-Z\s'-]*?)(?=\s*[,\d]|\s*$)/i)
+  // Equipment: MUST start with "equipment" keyword
+  const equipMatch = t.match(/\bequipment\s+([a-zA-Z][a-zA-Z\s'-]*?)(?:\s*$)/i)
   if (equipMatch) {
     const eq = equipMatch[1].trim()
     result.equipment = eq
     result.equipmentId = eq.toLowerCase().replace(/\s+/g, "-")
   }
 
-  // Name: leading words before "on …", a digit, or end of string
-  // Skip if the phrase starts with an action word like "change" or "update"
-  const nameMatch = t.match(/^([a-zA-Z][a-zA-Z\s'-]*?)(?=\s+on\s|\s+\d|\s*$)/i)
+  // Name: MUST start with "name" keyword
+  const nameMatch = t.match(/\bname\s+([a-zA-Z][a-zA-Z\s'-]*?)(?:\s*$)/i)
   if (nameMatch) {
-    const candidate = nameMatch[1].trim()
-    if (candidate && !/^(change|update|modify|edit|switch)\b/i.test(candidate)) {
-      result.name = candidate
-    }
+    result.name = nameMatch[1].trim()
   }
 
   return result

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { parseExerciseVoice } from "@/lib/claude"
+import { parseExerciseVoice, parseExerciseVoicePartial } from "@/lib/claude"
 
 export async function POST(request: NextRequest) {
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -10,9 +10,11 @@ export async function POST(request: NextRequest) {
   }
 
   let transcript: string
+  let partial: boolean
   try {
-    const body = (await request.json()) as { transcript?: string }
+    const body = await request.json() as { transcript?: string; partial?: boolean }
     transcript = body.transcript ?? ""
+    partial = body.partial ?? false
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
   }
@@ -22,6 +24,10 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    if (partial) {
+      const exercise = parseExerciseVoicePartial(transcript)
+      return NextResponse.json({ exercise })
+    }
     const exercise = await parseExerciseVoice(transcript)
     return NextResponse.json({ exercise })
   } catch (err) {
