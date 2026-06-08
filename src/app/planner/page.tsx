@@ -4,14 +4,20 @@ import { useState, useEffect } from "react";
 import { Dumbbell, History, User } from "lucide-react";
 import { VoiceButton } from "@/components/VoiceButton";
 import WorkoutPlan from "@/components/WorkoutPlan";
+import ExerciseSheet from "@/components/ExerciseSheet";
 import { useWorkoutStore } from "@/store/useWorkoutStore";
+import type { Exercise } from "@/types";
 
 export default function PlannerPage() {
   const [mounted, setMounted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
+  const [showAddSheet, setShowAddSheet] = useState(false);
 
   const plan = useWorkoutStore((s) => s.plan);
   const addExercise = useWorkoutStore((s) => s.addExercise);
+  const updateExercise = useWorkoutStore((s) => s.updateExercise);
+  const deleteExercise = useWorkoutStore((s) => s.deleteExercise);
   const hydrate = useWorkoutStore((s) => s.hydrate);
 
   useEffect(() => {
@@ -32,14 +38,17 @@ export default function PlannerPage() {
       });
       const data = (await res.json()) as { exercise?: Parameters<typeof addExercise>[0]; error?: string };
       if (!res.ok) {
-        setError(data.error ?? "Failed to parse exercise.");
-        return;
+        const msg = data.error ?? "Failed to parse exercise.";
+        setError(msg);
+        throw new Error(msg);
       }
       if (data.exercise) {
         addExercise(data.exercise);
       }
-    } catch (_err) {
-      setError("Network error. Please try again.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Network error. Please try again.";
+      setError(msg);
+      throw err;
     }
   };
 
@@ -82,7 +91,10 @@ export default function PlannerPage() {
         </section>
 
         <section className="flex-1 overflow-y-auto pr-1 pb-3">
-          <WorkoutPlan plan={plan} />
+          <WorkoutPlan
+            plan={plan}
+            onEditExercise={(exercise) => setEditingExercise(exercise)}
+          />
         </section>
 
         <section className="border-t-[1.5px] border-[color:var(--border)] bg-white px-5 py-5">
@@ -121,6 +133,61 @@ export default function PlannerPage() {
           </button>
         </nav>
       </div>
+
+      {/* FAB */}
+      <button
+        onClick={() => setShowAddSheet(true)}
+        style={{
+          position: "fixed",
+          bottom: "72px",
+          right: "calc(50% - 215px + 16px)",
+          width: "52px",
+          height: "52px",
+          borderRadius: "16px",
+          background: "#2D6A4F",
+          color: "#fff",
+          fontSize: "24px",
+          boxShadow: "0 4px 16px rgba(45,106,79,0.4)",
+          zIndex: 40,
+          border: "none",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        aria-label="Add exercise"
+      >
+        +
+      </button>
+
+      {/* Edit sheet */}
+      {editingExercise && (
+        <ExerciseSheet
+          mode="edit"
+          exercise={editingExercise}
+          onSave={(updated) => {
+            updateExercise(updated);
+            setEditingExercise(null);
+          }}
+          onDelete={() => {
+            deleteExercise(editingExercise.id);
+            setEditingExercise(null);
+          }}
+          onClose={() => setEditingExercise(null)}
+        />
+      )}
+
+      {/* Add sheet */}
+      {showAddSheet && (
+        <ExerciseSheet
+          mode="add"
+          onSave={(exercise) => {
+            addExercise(exercise);
+            setShowAddSheet(false);
+          }}
+          onClose={() => setShowAddSheet(false)}
+        />
+      )}
     </main>
   );
 }

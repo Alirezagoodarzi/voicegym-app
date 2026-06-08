@@ -12,6 +12,8 @@ const defaultPlan: WorkoutPlan = {
 type WorkoutStore = {
   plan: WorkoutPlan
   addExercise: (exercise: Exercise) => void
+  updateExercise: (exercise: Exercise) => void
+  deleteExercise: (id: string) => void
   clearPlan: () => void
   hydrate: () => void
 }
@@ -25,6 +27,24 @@ export const useWorkoutStore = create<WorkoutStore>()(
           plan: {
             ...state.plan,
             exercises: [...state.plan.exercises, exercise],
+          },
+        }))
+      },
+      updateExercise: (exercise: Exercise) => {
+        set((state) => ({
+          plan: {
+            ...state.plan,
+            exercises: state.plan.exercises.map((ex) =>
+              ex.id === exercise.id ? exercise : ex
+            ),
+          },
+        }))
+      },
+      deleteExercise: (id: string) => {
+        set((state) => ({
+          plan: {
+            ...state.plan,
+            exercises: state.plan.exercises.filter((ex) => ex.id !== id),
           },
         }))
       },

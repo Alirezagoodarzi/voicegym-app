@@ -1,11 +1,13 @@
+import { Pencil } from "lucide-react";
 import type { Exercise } from "@/types";
 
 type ExerciseCardProps = {
   exercise: Exercise;
   index: number;
+  onEdit?: () => void;
 };
 
-export default function ExerciseCard({ exercise, index }: ExerciseCardProps) {
+export default function ExerciseCard({ exercise, index, onEdit }: ExerciseCardProps) {
   const stats = [
     { label: "SETS", value: exercise.sets },
     { label: "REPS", value: exercise.reps },
@@ -52,6 +54,28 @@ export default function ExerciseCard({ exercise, index }: ExerciseCardProps) {
           ))}
         </div>
       </div>
+
+      {onEdit && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onEdit(); }}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: "4px",
+            color: "var(--text-3)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--green)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-3)")}
+          aria-label="Edit exercise"
+        >
+          <Pencil size={14} />
+        </button>
+      )}
     </article>
   );
 }

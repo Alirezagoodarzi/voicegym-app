@@ -111,8 +111,9 @@ export function VoiceButton({ onTranscript }: VoiceButtonProps) {
       setStatus("processing");
       try {
         await onTranscript(finalTranscript.trim());
-      } catch {
-        setFeedback("Failed to process. Try again.");
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "";
+        setFeedback(/busy|unavailable|wait/i.test(msg) ? msg : "Failed to process. Try again.");
       } finally {
         setStatus("idle");
       }
