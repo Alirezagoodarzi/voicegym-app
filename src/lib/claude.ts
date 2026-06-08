@@ -55,10 +55,20 @@ export function parseExerciseVoicePartial(
     result.name = nameMatch[1].trim()
   }
 
+  // Weight: "80 kg" / "80 kilograms" / "175 lbs" / "175 pounds" / "weight 80"
+  const weightMatch =
+    t.match(/\b(\d+(?:\.\d+)?)\s*(?:kg|kilograms?)\b/i) ??
+    t.match(/\b(\d+(?:\.\d+)?)\s*(?:lbs?|pounds?)\b/i) ??
+    t.match(/\bweight\s+(\d+(?:\.\d+)?)\b/i)
+  if (weightMatch) {
+    result.weight = parseFloat(weightMatch[1])
+    result.weightUnit = /lbs?|pounds?/i.test(t) ? "lbs" : "kg"
+  }
+
   return result
 }
 
-const DEFAULT_SYSTEM_PROMPT = `You are a gym workout parser. Parse the user's voice command into a JSON object. Return ONLY valid JSON, no markdown, no explanation. If the user does not mention sets, reps, or rest time, omit those fields completely — do NOT guess or use defaults. Format: {"name": "string", "equipment": "string", "equipmentId": "string", "sets": "number or omit", "reps": "number or omit", "restSeconds": "number or omit"}`
+const DEFAULT_SYSTEM_PROMPT = `You are a gym workout parser. Parse the user's voice command into a JSON object. Return ONLY valid JSON, no markdown, no explanation. If the user does not mention sets, reps, or rest time, omit those fields completely — do NOT guess or use defaults. Format: {"name": "string", "equipment": "string", "equipmentId": "string", "sets": "number or omit", "reps": "number or omit", "restSeconds": "number or omit", "weight": 0, "weightUnit": "kg"} — weight is 0 if not mentioned, weightUnit is "kg" or "lbs" (default "kg")`
 export async function parseExerciseVoice(
   transcript: string,
   systemPrompt?: string
@@ -102,6 +112,9 @@ export async function parseExerciseVoice(
   } catch {
     throw new Error(`Failed to parse Claude response as JSON: ${raw}`)
   }
+
+  parsed.weight = parsed.weight ?? 0
+  parsed.weightUnit = parsed.weightUnit ?? "kg"
 
   // When a custom system prompt is used (partial mode), skip strict validation
   if (systemPrompt) {

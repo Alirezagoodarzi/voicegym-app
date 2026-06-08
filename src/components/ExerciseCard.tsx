@@ -52,6 +52,15 @@ export default function ExerciseCard({ exercise, index, onEdit }: ExerciseCardPr
               <span className="text-[11px] text-text-2">{stat.label}</span>
             </div>
           ))}
+          <div
+            className="flex items-center gap-2 rounded-[8px] border border-border px-2 py-1"
+            style={{ background: "#EEF2E8" }}
+          >
+            <span style={{ color: "#2D6A4F", fontWeight: 700 }} className="text-[11px]">
+              {exercise.weight ?? 0}
+            </span>
+            <span className="text-[11px] text-text-2">{exercise.weightUnit ?? "kg"}</span>
+          </div>
         </div>
       </div>
 

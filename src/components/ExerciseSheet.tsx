@@ -35,6 +35,8 @@ type FormState = {
   sets: string;
   reps: string;
   restSeconds: string;
+  weight: string;
+  weightUnit: "kg" | "lbs";
 };
 
 const labelStyle: CSSProperties = {
@@ -82,6 +84,8 @@ export default function ExerciseSheet({
     sets: exercise?.sets?.toString() ?? "",
     reps: exercise?.reps?.toString() ?? "",
     restSeconds: exercise?.restSeconds?.toString() ?? "",
+    weight: exercise?.weight?.toString() ?? "0",
+    weightUnit: exercise?.weightUnit ?? "kg",
   });
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [micStatus, setMicStatus] = useState<"idle" | "listening" | "processing">("idle");
@@ -160,6 +164,8 @@ console.log('ALi ALI:', 'ALiALiALi')
               sets: ex.sets !== undefined ? ex.sets.toString() : mode === "add" ? "0" : prev.sets,
               reps: ex.reps !== undefined ? ex.reps.toString() : mode === "add" ? "0" : prev.reps,
               restSeconds: ex.restSeconds !== undefined ? ex.restSeconds.toString() : mode === "add" ? "0" : prev.restSeconds,
+              weight: ex.weight !== undefined ? ex.weight.toString() : prev.weight,
+              weightUnit: ex.weightUnit ?? prev.weightUnit,
             }));
           } else {
             setMicError(data.error ?? "Failed to parse. Try again.");
@@ -191,6 +197,8 @@ console.log('ALi ALI:', 'ALiALiALi')
       sets: Number(form.sets),
       reps: Number(form.reps),
       restSeconds: Number(form.restSeconds),
+      weight: Number(form.weight),
+      weightUnit: form.weightUnit,
     });
   };
 
@@ -331,7 +339,7 @@ console.log('ALi ALI:', 'ALiALiALi')
         </div>
 
         {/* Sets / Reps / Rest */}
-        <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+        <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
           {numericFields.map(({ key, label }) => (
             <div key={key} style={{ flex: 1 }}>
               <label style={labelStyle}>{label}</label>
@@ -347,6 +355,42 @@ console.log('ALi ALI:', 'ALiALiALi')
               />
             </div>
           ))}
+        </div>
+
+        {/* Weight + unit toggle */}
+        <div style={{ display: "flex", gap: "8px", alignItems: "flex-end", marginBottom: "20px" }}>
+          <div style={{ flex: 1 }}>
+            <label style={labelStyle}>Weight</label>
+            <input
+              type="number"
+              value={form.weight}
+              onChange={(e) => setForm((f) => ({ ...f, weight: e.target.value }))}
+              style={getInputStyle("weight")}
+              onFocus={() => setFocusedField("weight")}
+              onBlur={() => setFocusedField(null)}
+            />
+          </div>
+          <div style={{ display: "flex", gap: "4px", paddingBottom: "1px" }}>
+            {(["kg", "lbs"] as const).map((unit) => (
+              <button
+                key={unit}
+                onClick={() => setForm((f) => ({ ...f, weightUnit: unit }))}
+                style={{
+                  background: form.weightUnit === unit ? "#2D6A4F" : "#EEF2E8",
+                  color: form.weightUnit === unit ? "#fff" : "#4A4A4A",
+                  border: "none",
+                  borderRadius: "8px",
+                  padding: "4px 10px",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                }}
+              >
+                {unit}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Buttons */}

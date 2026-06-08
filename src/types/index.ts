@@ -6,6 +6,8 @@ export type Exercise = {
   sets: number
   reps: number
   restSeconds: number
+  weight: number
+  weightUnit: "kg" | "lbs"
 }
 
 export type WorkoutPlan = {
