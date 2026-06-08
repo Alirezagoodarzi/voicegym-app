@@ -20,6 +20,66 @@ interface ISpeechRecognition extends EventTarget {
   stop(): void;
 }
 
+type StepperProps = {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  step?: number;
+  min?: number;
+};
+
+function Stepper({ label, value, onChange, step = 1, min = 0 }: StepperProps) {
+  const num = parseFloat(value) || 0;
+  return (
+    <div style={{ flex: 1 }}>
+      <label style={{
+        fontSize: "10px", fontWeight: 600, color: "#9A9A9A",
+        textTransform: "uppercase" as const, letterSpacing: "0.5px",
+        display: "block", marginBottom: "4px",
+      }}>
+        {label}
+      </label>
+      <div style={{
+        display: "flex", alignItems: "center",
+        background: "#EEF2E8", border: "1.5px solid #E0E7D8",
+        borderRadius: "10px", overflow: "hidden", height: "42px",
+      }}>
+        <button
+          type="button"
+          onClick={() => onChange(String(Math.max(min, num - step)))}
+          style={{
+            width: "42px", height: "42px", flexShrink: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "20px", fontWeight: 300, color: "#2D6A4F",
+            background: "transparent", border: "none", cursor: "pointer",
+          }}
+        >−</button>
+        <input
+          type="number"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          style={{
+            flex: 1, textAlign: "center" as const, fontSize: "15px",
+            fontWeight: 700, color: "#1A1A1A", border: "none",
+            background: "transparent", outline: "none",
+            fontFamily: "inherit", width: "100%",
+          }}
+        />
+        <button
+          type="button"
+          onClick={() => onChange(String(num + step))}
+          style={{
+            width: "42px", height: "42px", flexShrink: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: "20px", fontWeight: 300, color: "#2D6A4F",
+            background: "transparent", border: "none", cursor: "pointer",
+          }}
+        >+</button>
+      </div>
+    </div>
+  );
+}
+
 type ExerciseSheetProps = {
   mode: "edit" | "add";
   exercise?: Exercise;
@@ -64,11 +124,6 @@ const baseInputStyle: CSSProperties = {
   boxSizing: "border-box",
 };
 
-const numericFields = [
-  { key: "sets" as const, label: "Sets" },
-  { key: "reps" as const, label: "Reps" },
-  { key: "restSeconds" as const, label: "Rest (s)" },
-];
 
 export default function ExerciseSheet({
   mode,
@@ -337,56 +392,41 @@ console.log('ALi ALI:', 'ALiALiALi')
 
         {/* Sets / Reps / Rest */}
         <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
-          {numericFields.map(({ key, label }) => (
-            <div key={key} style={{ flex: 1 }}>
-              <label style={labelStyle}>{label}</label>
-              <input
-                type="number"
-                value={form[key]}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, [key]: e.target.value } as FormState))
-                }
-                style={getInputStyle(key)}
-                onFocus={() => setFocusedField(key)}
-                onBlur={() => setFocusedField(null)}
-              />
-            </div>
-          ))}
+          <Stepper label="Sets" value={form.sets}
+            onChange={(v) => setForm((f) => ({ ...f, sets: v }))} min={0} />
+          <Stepper label="Reps" value={form.reps}
+            onChange={(v) => setForm((f) => ({ ...f, reps: v }))} min={0} />
+          <Stepper label="Rest (s)" value={form.restSeconds}
+            onChange={(v) => setForm((f) => ({ ...f, restSeconds: v }))}
+            step={5} min={0} />
         </div>
 
         {/* Weight + unit toggle */}
-        <div style={{ display: "flex", gap: "8px", alignItems: "flex-end", marginBottom: "20px" }}>
+        <div style={{ display: "flex", gap: "8px", marginBottom: "20px", alignItems: "flex-end" }}>
+          <Stepper label="Weight" value={form.weight}
+            onChange={(v) => setForm((f) => ({ ...f, weight: v }))}
+            step={2.5} min={0} />
           <div style={{ flex: 1 }}>
-            <label style={labelStyle}>Weight</label>
-            <input
-              type="number"
-              value={form.weight}
-              onChange={(e) => setForm((f) => ({ ...f, weight: e.target.value }))}
-              style={getInputStyle("weight")}
-              onFocus={() => setFocusedField("weight")}
-              onBlur={() => setFocusedField(null)}
-            />
-          </div>
-          <div style={{ display: "flex", gap: "4px", paddingBottom: "1px" }}>
-            {(["kg", "lbs"] as const).map((unit) => (
-              <button
-                key={unit}
-                onClick={() => setForm((f) => ({ ...f, weightUnit: unit }))}
-                style={{
-                  background: form.weightUnit === unit ? "#2D6A4F" : "#EEF2E8",
-                  color: form.weightUnit === unit ? "#fff" : "#4A4A4A",
-                  border: "none",
-                  borderRadius: "8px",
-                  padding: "4px 10px",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                }}
-              >
-                {unit}
-              </button>
-            ))}
+            <label style={{
+              fontSize: "10px", fontWeight: 600, color: "#9A9A9A",
+              textTransform: "uppercase" as const, letterSpacing: "0.5px",
+              display: "block", marginBottom: "4px",
+            }}>Unit</label>
+            <div style={{ display: "flex", gap: "4px" }}>
+              {(["kg", "lbs"] as const).map((u) => (
+                <button key={u} type="button"
+                  onClick={() => setForm((f) => ({ ...f, weightUnit: u }))}
+                  style={{
+                    flex: 1, padding: "10px 0", borderRadius: "8px",
+                    fontSize: "12px", fontWeight: 700, cursor: "pointer",
+                    fontFamily: "inherit", border: "1.5px solid",
+                    borderColor: form.weightUnit === u ? "#2D6A4F" : "#E0E7D8",
+                    background: form.weightUnit === u ? "#2D6A4F" : "#EEF2E8",
+                    color: form.weightUnit === u ? "#fff" : "#4A4A4A",
+                  }}
+                >{u}</button>
+              ))}
+            </div>
           </div>
         </div>
 
