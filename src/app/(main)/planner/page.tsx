@@ -55,9 +55,13 @@ export default function PlannerPage() {
   };
 
   return (
-    <main className="bg-bg text-text-1" style={{ height: '100dvh', display: 'flex', flexDirection: 'column' }}>
-      <div className="mx-auto flex max-w-[430px] flex-col px-4" style={{ flex: 1, minHeight: 0, width: '100%' }}>
-        <header className="flex h-[60px] items-center justify-between py-4">
+    <main style={{
+      height: '100dvh', display: 'flex', flexDirection: 'column',
+      maxWidth: '430px', margin: '0 auto', background: '#F5F7F2',
+      paddingBottom: '0px',
+    }}>
+      <div className="flex flex-col px-4" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+        <header className="flex h-[60px] items-center justify-between py-4" style={{ flexShrink: 0 }}>
           <div>
             <h1 className="text-[26px] font-extrabold tracking-[-0.8px] text-text-1">
               Voice<span className="text-green">Gym</span>
@@ -71,7 +75,7 @@ export default function PlannerPage() {
           </span>
         </header>
 
-        <section className="mb-4 rounded-[14px] border border-border bg-white px-4 py-4">
+        <section className="mb-4 rounded-[14px] border border-border bg-white px-4 py-4" style={{ flexShrink: 0 }}>
           <div className="flex items-center justify-between gap-3">
             <p className="text-[14px] font-semibold text-text-1">{plan.name}</p>
             <span
@@ -92,7 +96,7 @@ export default function PlannerPage() {
           )}
         </section>
 
-        <section className="flex-1 overflow-y-auto pr-1 pb-16" style={{ minHeight: 0 }}>
+        <section style={{ flex: 1, overflowY: 'auto', minHeight: 0, paddingBottom: '16px', paddingRight: '4px' }}>
           <WorkoutPlan
             plan={plan}
             onEditExercise={(exercise) => setEditingExercise(exercise)}
@@ -100,7 +104,11 @@ export default function PlannerPage() {
           />
         </section>
 
-        <section className="border-t-[1.5px] border-[color:var(--border)] bg-white px-5 py-5" style={{ flexShrink: 0 }}>
+        <section style={{
+          flexShrink: 0, background: '#fff',
+          borderTop: '1.5px solid #E0E7D8',
+          padding: '16px 20px 48px',
+        }}>
           <button
             onClick={() => router.push("/session")}
             style={{
