@@ -107,22 +107,8 @@ export default function SessionPage() {
 
       const allComplete = next.every((se) => se.sets.every((s) => s.done));
       if (allComplete && !savedRef.current) {
-        const doneCount = next.reduce(
-          (acc, se) => acc + se.sets.filter((s) => s.done).length,
-          0
-        );
         setTimeout(() => {
-          savedRef.current = true;
-          saveSession({
-            id: crypto.randomUUID(),
-            date: new Date().toISOString(),
-            duration: elapsed,
-            status: "completed",
-            exercises: next,
-            planName: plan.name,
-            totalSets: next.reduce((acc, se) => acc + se.sets.length, 0),
-            completedSets: doneCount,
-          });
+          doSaveSession("completed");
           setShowCongrats(true);
         }, 800);
       }

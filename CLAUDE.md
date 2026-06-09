@@ -28,6 +28,9 @@ Example: "bench press on barbell, 4 sets, 8 reps, 90 seconds rest, 80 kg"
 - Pages under src/app/(main)/ share the bottom nav layout
 - Session data stored in localStorage key 'voicegym-sessions'
 - Session helpers in src/lib/storage.ts: getSessions(), saveSession()
+- Settings page at /settings — profile, preferences, about
+- Profile data in localStorage 'voicegym-profile'
+- Preferences in localStorage 'voicegym-preferences'
 
 ## Core Types (keep in sync with src/types/index.ts)
 ```typescript

@@ -8,7 +8,7 @@ export function BottomNav() {
   const items = [
     { label: 'Workout', icon: '🏋️', path: '/planner' },
     { label: 'History', icon: '🕐', path: '/history' },
-    { label: 'Profile', icon: '👤', path: '/profile' },
+    { label: 'Settings', icon: '⚙️', path: '/settings' },
   ]
 
   return (
