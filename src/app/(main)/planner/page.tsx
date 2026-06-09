@@ -55,8 +55,8 @@ export default function PlannerPage() {
   };
 
   return (
-    <main className="min-h-screen bg-bg text-text-1">
-      <div className="mx-auto flex min-h-screen max-w-[430px] flex-col px-4 pb-4">
+    <main className="bg-bg text-text-1" style={{ height: '100dvh', display: 'flex', flexDirection: 'column' }}>
+      <div className="mx-auto flex max-w-[430px] flex-col px-4" style={{ flex: 1, minHeight: 0, width: '100%' }}>
         <header className="flex h-[60px] items-center justify-between py-4">
           <div>
             <h1 className="text-[26px] font-extrabold tracking-[-0.8px] text-text-1">
@@ -92,7 +92,7 @@ export default function PlannerPage() {
           )}
         </section>
 
-        <section className="flex-1 overflow-y-auto pr-1 pb-3">
+        <section className="flex-1 overflow-y-auto pr-1 pb-16" style={{ minHeight: 0 }}>
           <WorkoutPlan
             plan={plan}
             onEditExercise={(exercise) => setEditingExercise(exercise)}
@@ -100,7 +100,7 @@ export default function PlannerPage() {
           />
         </section>
 
-        <section className="border-t-[1.5px] border-[color:var(--border)] bg-white px-5 py-5">
+        <section className="border-t-[1.5px] border-[color:var(--border)] bg-white px-5 py-5" style={{ flexShrink: 0 }}>
           <button
             onClick={() => router.push("/session")}
             style={{

@@ -34,6 +34,8 @@ Example: "bench press on barbell, 4 sets, 8 reps, 90 seconds rest, 80 kg"
 - Shared settings helper components in src/components/SettingsHelpers.tsx
 - Bottom sheet confirmation pattern used for all destructive actions
 - No browser confirm() or alert() anywhere in the app
+- src/app/page.tsx is a splash screen — auto-redirects to /planner after 2s, do NOT add content here
+- Never redirect splash to any page other than /planner
 
 ## Core Types (keep in sync with src/types/index.ts)
 ```typescript
@@ -103,8 +105,8 @@ type WorkoutSession = {
 - Commit after each working feature, not at end of day
 
 ## Deployment
-- Production URL: (not deployed yet — check Vercel dashboard)
-- GitHub repo: voicegym-app (https://github.com/Alirezagoodarzi/voicegym-app)
+- Production URL: https://voicegym-app.vercel.app
+- GitHub: https://github.com/YOUR-USERNAME/voicegym-app
 - Platform: Vercel
 - Auto-deploys on push to main branch
 - Environment variables are set in Vercel dashboard, not .env.local
@@ -112,12 +114,14 @@ type WorkoutSession = {
 
 ## Feature Status
 ### v1.0.0 — Implemented
+- Splash screen with 2s auto-redirect to /planner
 - Voice exercise parsing via Claude API
 - Add / Edit / Delete exercises with confirmation
 - Drag to reorder exercises
 - Workout session tracking with set checkboxes
 - Session history with date and duration
-- Settings: Profile, Preferences (UI), About the Founder
+- Settings sub-pages: Profile, Preferences, About the Founder
+- In-app confirmation modals for all destructive actions (no browser confirm() or alert() anywhere)
 - Dark/Light theme: Light with green + lime design system
 
 ### Planned for v2.0
