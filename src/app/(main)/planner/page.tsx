@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Dumbbell, History, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { VoiceButton } from "@/components/VoiceButton";
 import WorkoutPlan from "@/components/WorkoutPlan";
 import ExerciseSheet from "@/components/ExerciseSheet";
@@ -9,6 +9,7 @@ import { useWorkoutStore } from "@/store/useWorkoutStore";
 import type { Exercise } from "@/types";
 
 export default function PlannerPage() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
@@ -100,6 +101,24 @@ export default function PlannerPage() {
         </section>
 
         <section className="border-t-[1.5px] border-[color:var(--border)] bg-white px-5 py-5">
+          <button
+            onClick={() => router.push("/session")}
+            style={{
+              display: "block",
+              width: "100%",
+              background: "var(--lime)",
+              color: "var(--green)",
+              border: "none",
+              borderRadius: 12,
+              padding: "12px 16px",
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: "pointer",
+              marginBottom: 16,
+            }}
+          >
+            ▶ Start Session
+          </button>
           <p className="mb-5 text-center text-[13px] font-medium text-text-2">
             Tap the mic and speak your next move.
           </p>
@@ -110,30 +129,6 @@ export default function PlannerPage() {
             <p className="mt-3 text-center text-[12px] text-red-500">{error}</p>
           ) : null}
         </section>
-
-        <nav className="mt-3 flex items-center justify-between rounded-t-[22px] border-t border-border bg-white px-6 py-3">
-          <button
-            className="flex flex-col items-center gap-1 text-[11px] font-semibold"
-            style={{ color: "#2D6A4F" }}
-          >
-            <Dumbbell className="h-5 w-5" />
-            Workout
-          </button>
-          <button
-            className="flex flex-col items-center gap-1 text-[11px] font-semibold"
-            style={{ color: "#9A9A9A" }}
-          >
-            <History className="h-5 w-5" />
-            History
-          </button>
-          <button
-            className="flex flex-col items-center gap-1 text-[11px] font-semibold"
-            style={{ color: "#9A9A9A" }}
-          >
-            <User className="h-5 w-5" />
-            Profile
-          </button>
-        </nav>
       </div>
 
       {/* FAB */}
@@ -141,7 +136,7 @@ export default function PlannerPage() {
         onClick={() => setShowAddSheet(true)}
         style={{
           position: "fixed",
-          bottom: "72px",
+          bottom: "96px",
           right: "calc(50% - 215px + 16px)",
           width: "52px",
           height: "52px",

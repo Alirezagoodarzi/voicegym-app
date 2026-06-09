@@ -22,6 +22,12 @@ Example: "bench press on barbell, 4 sets, 8 reps, 90 seconds rest, 80 kg"
 - Types live in src/types/index.ts — always update types there first
 - localStorage helpers are in src/lib/storage.ts — use only those functions for persistence
 - Claude client wrapper is in src/lib/claude.ts
+- Session page lives at /session — full screen, no bottom nav
+- History page lives at /history — uses shared BottomNav
+- Bottom nav is a shared component at src/components/BottomNav.tsx
+- Pages under src/app/(main)/ share the bottom nav layout
+- Session data stored in localStorage key 'voicegym-sessions'
+- Session helpers in src/lib/storage.ts: getSessions(), saveSession()
 
 ## Core Types (keep in sync with src/types/index.ts)
 ```typescript
@@ -43,6 +49,27 @@ type WorkoutPlan = {
   createdAt: string
   exercises: Exercise[]
 }
+
+type SetRecord = {
+  setNumber: number
+  done: boolean
+}
+
+type SessionExercise = {
+  exercise: Exercise
+  sets: SetRecord[]
+}
+
+type WorkoutSession = {
+  id: string
+  date: string
+  duration: number        // in seconds
+  status: 'completed' | 'incomplete'
+  exercises: SessionExercise[]
+  planName: string
+  totalSets: number
+  completedSets: number
+}
 ```
 
 ## Coding Rules
@@ -59,6 +86,8 @@ type WorkoutPlan = {
 - Do not use React Context for state — use Zustand
 - Do not hardcode API keys anywhere
 - NEVER use CLAUDE_API_KEY anywhere in the codebase. The correct environment variable is always ANTHROPIC_API_KEY.
+- Do not add bottom nav directly to pages — use BottomNav component
+- Do not modify session/history storage format without updating types
 
 ## Git Workflow
 - Always run a pre-commit review before committing

@@ -16,3 +16,24 @@ export type WorkoutPlan = {
   createdAt: string
   exercises: Exercise[]
 }
+
+export type SetRecord = {
+  setNumber: number
+  done: boolean
+}
+
+export type SessionExercise = {
+  exercise: Exercise
+  sets: SetRecord[]
+}
+
+export type WorkoutSession = {
+  id: string
+  date: string
+  duration: number
+  status: 'completed' | 'incomplete'
+  exercises: SessionExercise[]
+  planName: string
+  totalSets: number
+  completedSets: number
+}
