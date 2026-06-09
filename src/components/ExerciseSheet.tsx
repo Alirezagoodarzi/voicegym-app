@@ -143,6 +143,7 @@ export default function ExerciseSheet({
     weightUnit: exercise?.weightUnit ?? "kg",
   });
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [micStatus, setMicStatus] = useState<"idle" | "listening" | "processing">("idle");
   const [micError, setMicError] = useState<string>("");
   const recognitionRef = useRef<ISpeechRecognition | null>(null);
@@ -434,7 +435,7 @@ console.log('ALi ALI:', 'ALiALiALi')
         <div style={{ display: "flex", gap: "8px" }}>
           {mode === "edit" && onDelete && (
             <button
-              onClick={onDelete}
+              onClick={() => setShowDeleteConfirm(true)}
               style={{
                 flex: 1,
                 padding: "11px",
@@ -468,6 +469,56 @@ console.log('ALi ALI:', 'ALiALiALi')
           </button>
         </div>
       </div>
+
+      {showDeleteConfirm && (
+        <>
+          <div onClick={() => setShowDeleteConfirm(false)} style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.4)', zIndex: 200,
+          }} />
+          <div style={{
+            position: 'fixed', bottom: 0, left: '50%',
+            transform: 'translateX(-50%)',
+            width: '100%', maxWidth: '430px',
+            background: '#fff', borderRadius: '24px 24px 0 0',
+            padding: '0 20px 40px', zIndex: 201,
+          }}>
+            <div style={{
+              width: '36px', height: '4px', background: '#E0E7D8',
+              borderRadius: '2px', margin: '12px auto 20px',
+            }} />
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+              <div style={{ fontSize: '32px', marginBottom: '12px' }}>⚠️</div>
+              <div style={{ fontSize: '16px', fontWeight: 800,
+                color: '#1A1A1A', marginBottom: '8px' }}>
+                Delete Exercise?
+              </div>
+              <div style={{ fontSize: '13px', color: '#9A9A9A',
+                lineHeight: '1.5' }}>
+                This will remove this exercise from your workout plan.
+                This cannot be undone.
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button onClick={() => setShowDeleteConfirm(false)} style={{
+                flex: 1, padding: '13px', borderRadius: '12px',
+                fontSize: '14px', fontWeight: 700, cursor: 'pointer',
+                background: '#EEF2E8', color: '#4A4A4A',
+                border: '1.5px solid #E0E7D8', fontFamily: 'inherit',
+              }}>Cancel</button>
+              <button onClick={() => {
+                setShowDeleteConfirm(false)
+                onDelete?.()
+              }} style={{
+                flex: 1, padding: '13px', borderRadius: '12px',
+                fontSize: '14px', fontWeight: 700, cursor: 'pointer',
+                background: '#FF4D4D', color: '#fff',
+                border: 'none', fontFamily: 'inherit',
+              }}>Delete</button>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

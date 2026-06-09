@@ -28,9 +28,12 @@ Example: "bench press on barbell, 4 sets, 8 reps, 90 seconds rest, 80 kg"
 - Pages under src/app/(main)/ share the bottom nav layout
 - Session data stored in localStorage key 'voicegym-sessions'
 - Session helpers in src/lib/storage.ts: getSessions(), saveSession()
-- Settings page at /settings — profile, preferences, about
+- Settings pages live at /settings, /settings/profile, /settings/preferences, /settings/about
 - Profile data in localStorage 'voicegym-profile'
 - Preferences in localStorage 'voicegym-preferences'
+- Shared settings helper components in src/components/SettingsHelpers.tsx
+- Bottom sheet confirmation pattern used for all destructive actions
+- No browser confirm() or alert() anywhere in the app
 
 ## Core Types (keep in sync with src/types/index.ts)
 ```typescript
@@ -91,6 +94,7 @@ type WorkoutSession = {
 - NEVER use CLAUDE_API_KEY anywhere in the codebase. The correct environment variable is always ANTHROPIC_API_KEY.
 - Do not add bottom nav directly to pages — use BottomNav component
 - Do not modify session/history storage format without updating types
+- No browser confirm() or alert() — use bottom sheet confirmation modals
 
 ## Git Workflow
 - Always run a pre-commit review before committing
@@ -99,11 +103,35 @@ type WorkoutSession = {
 - Commit after each working feature, not at end of day
 
 ## Deployment
-- Production URL: (not deployed yet — new project)
+- Production URL: (not deployed yet — check Vercel dashboard)
+- GitHub repo: voicegym-app (https://github.com/Alirezagoodarzi/voicegym-app)
 - Platform: Vercel
 - Auto-deploys on push to main branch
 - Environment variables are set in Vercel dashboard, not .env.local
 - Previous project URL: https://voice-gym-planner-bli2pikpt-alirezagoodarzi1.vercel.app/
+
+## Feature Status
+### v1.0.0 — Implemented
+- Voice exercise parsing via Claude API
+- Add / Edit / Delete exercises with confirmation
+- Drag to reorder exercises
+- Workout session tracking with set checkboxes
+- Session history with date and duration
+- Settings: Profile, Preferences (UI), About the Founder
+- Dark/Light theme: Light with green + lime design system
+
+### Planned for v2.0
+- Google login + cloud sync
+- Push notifications for inactivity reminders
+- Multi-language support (next-intl)
+- React Native / Expo mobile app
+- Exercise history and progress charts
+- Multiple workout plans
+
+### UI-Only (not yet functional)
+- Inactivity Reminder toggle — no actual notifications sent
+- Language selector — app stays in English
+- Default weight unit — saved but not applied to new exercises yet
 
 ## Future Plans (don't build yet)
 - User accounts + cloud sync (paid tier)
@@ -123,5 +151,3 @@ type WorkoutSession = {
 - --text-3: #9A9A9A (muted)
 - --border: #E0E7D8 (all borders)
 - Use inline styles when Tailwind classes are being overridden
-
-
