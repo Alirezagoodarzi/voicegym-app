@@ -74,6 +74,14 @@ export default function AboutPage() {
           <span style={{ fontSize: '11px', color: '#9A9A9A' }}>VoiceGym v1.0.0</span>
           <span style={{ fontSize: '11px', color: '#9A9A9A' }}>Built with Claude Code ⚡</span>
         </div>
+        <div style={{
+          textAlign: 'center',
+          marginTop: '8px',
+          fontSize: '11px',
+          color: '#9A9A9A',
+        }}>
+          © 2026 Dr. Alireza Goodarzi. All rights reserved.
+        </div>
       </div>
     </div>
   )

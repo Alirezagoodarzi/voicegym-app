@@ -80,6 +80,16 @@ export default function SplashPage() {
             animation: 'load 2s linear forwards',
           }} />
         </div>
+
+        <div style={{
+          marginTop: '32px',
+          fontSize: '12px',
+          color: 'rgba(255,255,255,0.4)',
+          fontWeight: 500,
+          letterSpacing: '0.3px',
+        }}>
+          By Dr. Alireza Goodarzi
+        </div>
       </div>
 
       {/* Footer */}
