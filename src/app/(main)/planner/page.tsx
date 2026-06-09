@@ -107,7 +107,7 @@ export default function PlannerPage() {
         <section style={{
           flexShrink: 0, background: '#fff',
           borderTop: '1.5px solid #E0E7D8',
-          padding: '16px 20px 52px',
+          padding: '16px 20px 80px',
         }}>
           <button
             onClick={() => router.push("/session")}
