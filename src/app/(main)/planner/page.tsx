@@ -8,6 +8,82 @@ import ExerciseSheet from "@/components/ExerciseSheet";
 import { useWorkoutStore } from "@/store/useWorkoutStore";
 import type { Exercise } from "@/types";
 
+const HINTS = [
+  "bench press on barbell, 4 sets, 8 reps, 90s rest",
+  "squat on rack, 5 sets, 5 reps, 120s rest, 100 kg",
+  "plank on mat, 3 sets, 1 rep, 60 seconds rest",
+  "deadlift on barbell, 3 sets, 5 reps, 180s rest, 120 kg",
+]
+
+function TypingHint() {
+  const [hintIndex, setHintIndex] = useState(0)
+  const [displayed, setDisplayed] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    const current = HINTS[hintIndex]
+
+    if (!isDeleting && displayed.length < current.length) {
+      const timeout = setTimeout(() => {
+        setDisplayed(current.slice(0, displayed.length + 1))
+      }, 40)
+      return () => clearTimeout(timeout)
+    }
+
+    if (!isDeleting && displayed.length === current.length) {
+      const timeout = setTimeout(() => {
+        setIsDeleting(true)
+      }, 2000)
+      return () => clearTimeout(timeout)
+    }
+
+    if (isDeleting && displayed.length > 0) {
+      const timeout = setTimeout(() => {
+        setDisplayed(displayed.slice(0, -1))
+      }, 20)
+      return () => clearTimeout(timeout)
+    }
+
+    if (isDeleting && displayed.length === 0) {
+      setIsDeleting(false)
+      setHintIndex((i) => (i + 1) % HINTS.length)
+    }
+  }, [displayed, isDeleting, hintIndex])
+
+  return (
+    <div style={{
+      textAlign: 'center',
+      padding: '0 24px',
+      marginTop: '8px',
+      minHeight: '20px',
+    }}>
+      <span style={{
+        fontSize: '13px',
+        color: '#9A9A9A',
+        fontStyle: 'italic',
+        lineHeight: '1',
+      }}>
+        Say: &quot;{displayed}
+        <span style={{
+          display: 'inline-block',
+          width: '1px',
+          height: '12px',
+          background: '#2D6A4F',
+          marginLeft: '1px',
+          verticalAlign: 'middle',
+          animation: 'blink 1s step-end infinite',
+        }} />&quot;
+      </span>
+      <style>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+      `}</style>
+    </div>
+  )
+}
+
 export default function PlannerPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -130,6 +206,7 @@ export default function PlannerPage() {
           <p className="mb-5 text-center text-[13px] font-medium text-text-2">
             Tap the mic and speak your next move.
           </p>
+          {plan.exercises.length === 0 && <TypingHint />}
           <div className="flex justify-center">
             <VoiceButton onTranscript={handleTranscript} />
           </div>
