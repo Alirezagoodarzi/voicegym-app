@@ -1,44 +1,62 @@
 # VoiceGym — Claude Code Project Context
 
 ## What This App Does
-A voice-driven gym workout planner. Users speak exercise commands and the app
-parses them into structured workout plans using the Claude API.
+A voice-driven gym workout planner. Users speak exercise 
+commands and Claude AI parses them into structured workout plans.
 
-Voice command format: "[exercise name] on [equipment], [sets] sets, 
-[reps] reps, [rest] seconds rest, [weight] kg/lbs"
+Voice command format:
+"[exercise] on [equipment], [sets] sets, [reps] reps, [rest] seconds rest, [weight] kg"
 
 Example: "bench press on barbell, 4 sets, 8 reps, 90 seconds rest, 80 kg"
 
 ## Tech Stack
-- Next.js 14 (App Router) + TypeScript
+- Next.js 14 (App Router) + TypeScript strict mode
 - Tailwind CSS + shadcn/ui
+- Inter font (Google Fonts, weights 400-800)
 - Web Speech API (voice capture, browser-native)
-- Claude API via claude-sonnet-4-5 (voice text → structured plan)
+- Claude API via claude-sonnet-4-5
 - Zustand (client state)
 - localStorage (free tier persistence)
+- dnd-kit (drag to reorder)
 
-## Architecture Decisions
-- API route at /api/parse-exercise handles all Claude API calls (never call Claude from client)
-- Types live in src/types/index.ts — always update types there first
-- localStorage helpers are in src/lib/storage.ts — use only those functions for persistence
-- Claude client wrapper is in src/lib/claude.ts
-- Session page lives at /session — full screen, no bottom nav
-- History page lives at /history — uses shared BottomNav
-- Bottom nav is a shared component at src/components/BottomNav.tsx
-- Pages under src/app/(main)/ share the bottom nav layout
-- Session data stored in localStorage key 'voicegym-sessions'
-- Session helpers in src/lib/storage.ts: getSessions(), saveSession()
-- Settings pages live at /settings, /settings/profile, /settings/preferences, /settings/about
-- Profile data in localStorage 'voicegym-profile'
-- Preferences in localStorage 'voicegym-preferences'
-- Shared settings helper components in src/components/SettingsHelpers.tsx
-- Bottom sheet confirmation pattern used for all destructive actions
-- No browser confirm() or alert() anywhere in the app
-- src/app/page.tsx is a splash screen — auto-redirects to /planner after 2s, do NOT add content here
-- Never redirect splash to any page other than /planner
+## Design System — NEVER deviate
+- --bg: #F5F7F2 (page background)
+- --surface: #FFFFFF (card background)
+- --surface-2: #EEF2E8 (pill/tag backgrounds)
+- --green: #2D6A4F (primary)
+- --green-mid: #40916C (hover)
+- --green-light: #B7E4C7 (badge backgrounds)
+- --lime: #AAFF00 (mic button ONLY)
+- --text-1: #1A1A1A (headings)
+- --text-2: #4A4A4A (body)
+- --text-3: #9A9A9A (muted)
+- --border: #E0E7D8 (borders)
+- Use inline styles when Tailwind overrides design tokens
 
-## Core Types (keep in sync with src/types/index.ts)
-```typescript
+## Architecture
+- /api/parse-exercise — ALL Claude API calls go here only
+- src/types/index.ts — update types here first always
+- src/lib/claude.ts — Claude API client + regex partial parser
+- src/lib/storage.ts — all localStorage helpers
+- src/store/useWorkoutStore.ts — Zustand store
+- src/components/BottomNav.tsx — shared nav, never add to pages directly
+- src/components/ExerciseSheet.tsx — add/edit bottom sheet
+- src/components/SettingsHelpers.tsx — shared settings components
+- src/app/(main)/ — pages with shared bottom nav layout
+- src/app/session/ — full screen, no bottom nav
+- src/app/page.tsx — splash screen only, auto-redirects to /planner
+
+## Route Structure
+- / — splash screen (2s auto-redirect to /planner)
+- /planner — main workout planner
+- /session — active workout session
+- /history — past sessions
+- /settings — settings menu
+- /settings/profile — age, weight, height
+- /settings/preferences — units, language, reminders
+- /settings/about — founder info + copyright
+
+## Core Types
 type Exercise = {
   id: string
   name: string
@@ -71,88 +89,75 @@ type SessionExercise = {
 type WorkoutSession = {
   id: string
   date: string
-  duration: number        // in seconds
-  status: 'completed' | 'incomplete'
+  duration: number
+  status: "completed" | "incomplete"
   exercises: SessionExercise[]
   planName: string
   totalSets: number
   completedSets: number
 }
-```
+
+## localStorage Keys
+- voicegym-plan — current workout plan
+- voicegym-sessions — session history array
+- voicegym-profile — user profile (age, weight, height)
+- voicegym-preferences — app preferences
 
 ## Coding Rules
-- Always use TypeScript strict mode — no `any` types
-- Components go in src/components/ — one component per file
-- Use shadcn/ui components before writing custom UI
-- Never modify src/types/index.ts without telling the user first
-- Always handle loading and error states in components
-- Mobile-first CSS — design for small screens first
+- No any types — TypeScript strict always
+- One component per file in src/components/
+- Mobile-first — max-width 430px on all pages
+- Always handle loading and error states
+- No browser confirm() or alert() — use in-app modals
+- No React Context — use Zustand
+- No hardcoded API keys
 
 ## What NOT to Do
-- Do not install new dependencies without asking first
-- Do not call the Claude API from client components
-- Do not use React Context for state — use Zustand
-- Do not hardcode API keys anywhere
-- NEVER use CLAUDE_API_KEY anywhere in the codebase. The correct environment variable is always ANTHROPIC_API_KEY.
-- Do not add bottom nav directly to pages — use BottomNav component
-- Do not modify session/history storage format without updating types
-- No browser confirm() or alert() — use bottom sheet confirmation modals
+- NEVER use CLAUDE_API_KEY — always ANTHROPIC_API_KEY
+- Never call Claude API from client components
+- Never commit .env.local
+- Never add bottom nav directly to pages
+- Never change design tokens without explicit instruction
+- Never install dependencies without asking first
 
 ## Git Workflow
-- Always run a pre-commit review before committing
-- Use conventional commits format (feat:, fix:, chore:, refactor:)
-- Never commit .env.local or any file with API keys
-- Commit after each working feature, not at end of day
+- Pre-commit review before every commit
+- Conventional commits: feat:, fix:, chore:, refactor:
+- Never commit .env.local
+- Commit after each working feature
+
+## Environment Variables
+- ANTHROPIC_API_KEY in .env.local (never commit)
+- In production: set in Vercel dashboard
 
 ## Deployment
-- Production URL: https://voicegym-app.vercel.app
-- GitHub: https://github.com/YOUR-USERNAME/voicegym-app
-- Platform: Vercel
-- Auto-deploys on push to main branch
-- Environment variables are set in Vercel dashboard, not .env.local
-- Previous project URL: https://voice-gym-planner-bli2pikpt-alirezagoodarzi1.vercel.app/
+- Production: https://voicegym-app.vercel.app
+- Platform: Vercel — auto-deploys on push to main
+- GitHub: voicegym-app repo
 
 ## Feature Status
-### v1.0.0 — Implemented
-- Splash screen with 2s auto-redirect to /planner, author credit "By Dr. Alireza Goodarzi"
-- Copyright notice in Settings → About page
-- Voice exercise parsing via Claude API
-- Add / Edit / Delete exercises with confirmation
-- Drag to reorder exercises
-- Workout session tracking with set checkboxes
+### v1.0.0 — Shipped
+- Voice exercise parsing (Claude API)
+- Add / Edit / Delete exercises with confirmation modals
+- Drag to reorder (dnd-kit)
+- Weight tracking (kg/lbs)
+- Stepper inputs for numeric fields
+- Workout session with set checkboxes + timer
 - Session history with date and duration
-- Settings sub-pages: Profile, Preferences, About the Founder
-- In-app confirmation modals for all destructive actions (no browser confirm() or alert() anywhere)
-- Dark/Light theme: Light with green + lime design system
+- Settings: Profile, Preferences, About
+- Splash screen with animated typing hint
+- Mobile-first, tested on real device
 
-### Planned for v2.0
+### v2.0 — Planned
 - Google login + cloud sync
-- Push notifications for inactivity reminders
-- Multi-language support (next-intl)
-- React Native / Expo mobile app
-- Exercise history and progress charts
+- Push notifications
+- Multi-language (next-intl)
 - Multiple workout plans
+- React Native / Expo mobile app
+- Exercise history charts
+- PWA for App Store / Google Play
 
-### UI-Only (not yet functional)
-- Inactivity Reminder toggle — no actual notifications sent
-- Language selector — app stays in English
-- Default weight unit — saved but not applied to new exercises yet
-
-## Future Plans (don't build yet)
-- User accounts + cloud sync (paid tier)
-- React Native / Expo mobile app (will share types from this repo)
-- Exercise history and progress tracking
-
-## Design System — NEVER deviate from these
-- --bg: #F5F7F2 (page background)
-- --surface: #FFFFFF (card background)
-- --surface-2: #EEF2E8 (pill/tag backgrounds)
-- --green: #2D6A4F (primary — badges, numbers, active states)
-- --green-mid: #40916C (hover states)
-- --green-light: #B7E4C7 (badge backgrounds)
-- --lime: #AAFF00 (mic button ONLY — nothing else)
-- --text-1: #1A1A1A (headings)
-- --text-2: #4A4A4A (body)
-- --text-3: #9A9A9A (muted)
-- --border: #E0E7D8 (all borders)
-- Use inline styles when Tailwind classes are being overridden
+### UI-Only (not functional yet)
+- Inactivity Reminder — no notifications sent
+- Language selector — stays in English
+- Default weight unit — not applied to new exercises
