@@ -275,7 +275,7 @@ console.log('ALi ALI:', 'ALiALiALi')
           maxWidth: "430px",
           background: "#fff",
           borderRadius: "24px 24px 0 0",
-          padding: "0 20px 32px",
+          padding: "0 20px 100px",
           zIndex: 51,
         }}
       >
