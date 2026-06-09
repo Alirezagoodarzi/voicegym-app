@@ -114,7 +114,8 @@ type WorkoutSession = {
 
 ## Feature Status
 ### v1.0.0 — Implemented
-- Splash screen with 2s auto-redirect to /planner
+- Splash screen with 2s auto-redirect to /planner, author credit "By Dr. Alireza Goodarzi"
+- Copyright notice in Settings → About page
 - Voice exercise parsing via Claude API
 - Add / Edit / Delete exercises with confirmation
 - Drag to reorder exercises
