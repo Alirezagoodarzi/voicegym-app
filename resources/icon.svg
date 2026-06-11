@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="224" ry="224" fill="#2D6A4F"/>
+  <rect width="1024" height="1024" rx="224" ry="224" fill="url(#grad)" opacity="0.3"/>
+  <defs>
+    <radialGradient id="grad" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="108" y="380" width="120" height="264" rx="32" ry="32" fill="#AAFF00"/>
+  <rect x="228" y="452" width="80" height="120" rx="16" ry="16" fill="#AAFF00"/>
+  <rect x="308" y="472" width="408" height="80" rx="20" ry="20" fill="#AAFF00"/>
+  <rect x="716" y="452" width="80" height="120" rx="16" ry="16" fill="#AAFF00"/>
+  <rect x="796" y="380" width="120" height="264" rx="32" ry="32" fill="#AAFF00"/>
+  <circle cx="512" cy="512" r="110" fill="#2D6A4F"/>
+  <circle cx="512" cy="512" r="94" fill="#1a4a35"/>
+  <rect x="476" y="420" width="72" height="110" rx="36" ry="36" fill="#AAFF00"/>
+  <path d="M 444 530 Q 444 610 512 610 Q 580 610 580 530"
+        stroke="#AAFF00" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <line x1="512" y1="610" x2="512" y2="645" stroke="#AAFF00" stroke-width="20" stroke-linecap="round"/>
+  <line x1="474" y1="645" x2="550" y2="645" stroke="#AAFF00" stroke-width="20" stroke-linecap="round"/>
+</svg>

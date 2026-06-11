@@ -108,8 +108,9 @@ export default function PlannerPage() {
 
   const handleTranscript = async (transcript: string) => {
     setError(null);
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
     try {
-      const res = await fetch("/api/parse-exercise", {
+      const res = await fetch(`${apiBase}/api/parse-exercise`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ transcript }),
