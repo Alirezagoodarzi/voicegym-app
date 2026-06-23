@@ -202,7 +202,7 @@ export default function ExerciseSheet({
 
       void (async () => {
         try {
-          const res = await fetch("/api/parse-exercise", {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/parse-exercise`, {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({ transcript, partial: true }),
