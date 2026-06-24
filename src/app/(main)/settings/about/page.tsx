@@ -53,7 +53,7 @@ export default function AboutPage() {
         </p>
 
         {/* Links */}
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
           {[
             { label: 'GitHub →', href: '#' },
             { label: 'LinkedIn →', href: '#' },
@@ -67,6 +67,15 @@ export default function AboutPage() {
             </a>
           ))}
         </div>
+
+        {/* Privacy Policy */}
+        <a href="/privacy"
+          style={{ display: 'block', background: '#EEF2E8', border: '1.5px solid #E0E7D8',
+            borderRadius: '10px', padding: '8px 14px', fontSize: '12px',
+            fontWeight: 600, color: '#2D6A4F', textAlign: 'center',
+            textDecoration: 'none', marginBottom: '16px' }}>
+          Privacy Policy →
+        </a>
 
         {/* App info */}
         <div style={{ paddingTop: '14px', borderTop: '1px solid #E0E7D8',
