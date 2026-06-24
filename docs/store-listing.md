@@ -138,3 +138,26 @@ Health & Fitness
 | Website            | https://voicegym-app.vercel.app |
 | Privacy Policy URL | https://voicegym-app.vercel.app/privacy |
 | Content Rating     | Everyone                       |
+
+---
+
+## What's Needed Before Submission Checklist
+
+### Both Stores
+- [ ] Screenshots (7 recommended)
+- [ ] App icon ✅ (already done)
+- [ ] Privacy policy URL ✅ (voicegym-app.vercel.app/privacy)
+- [ ] App description ✅ (in this file)
+- [ ] Age rating: 4+ / Everyone
+
+### Google Play Only
+- [ ] Developer account active (pending)
+- [ ] Feature graphic 1024x500px
+- [ ] Signed AAB file ✅ (already generated)
+- [ ] Content rating questionnaire (in Play Console)
+
+### Apple App Store Only
+- [ ] Apple Developer account ($99/year)
+- [ ] Mac with Xcode for iOS build
+- [ ] iOS screenshots (iPhone 6.9")
+- [ ] App Review information (demo account if needed)
