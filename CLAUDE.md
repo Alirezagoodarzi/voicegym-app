@@ -1,4 +1,4 @@
-# VoiceGym — Claude Code Project Context
+# Voice Gym Planner — Claude Code Project Context
 
 ## What This App Does
 A voice-driven gym workout planner. Users speak exercise 

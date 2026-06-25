@@ -2,7 +2,7 @@
 
 ## App Name
 
-VoiceGym
+Voice Gym Planner
 
 ---
 

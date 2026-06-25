@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "VoiceGym",
+  title: "Voice Gym Planner",
   description: "Mobile-first voice-driven gym workout planner",
 };
 
