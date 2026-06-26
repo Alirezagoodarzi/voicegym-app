@@ -5,12 +5,10 @@ workflows:
     environment:
       groups:
         - app_store_credentials
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.alirezagoodarzi.voicegymplanner
       vars:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
+        BUNDLE_ID: "com.alirezagoodarzi.voicegymplanner"
       node: 18
     scripts:
       - name: Install dependencies
