@@ -79,6 +79,13 @@ export default function PrivacyPage() {
         <Section title="Third-Party Services (Anthropic Claude API)">
           VoiceGym uses the Anthropic Claude API to interpret your voice commands and parse
           them into structured exercise data.
+          Voice commands are temporarily transmitted to Anthropic&apos;s Claude API for processing
+          into structured exercise data. Audio data is processed in real-time and is not stored
+          permanently by us or Anthropic beyond each request.{' '}
+          <a href="https://anthropic.com/privacy" target="_blank" rel="noopener noreferrer"
+            style={{ color: '#2D6A4F', fontWeight: 600 }}>
+            Learn more at anthropic.com/privacy
+          </a>
           <BulletList items={[
             'When you use a voice command, the transcribed text is sent to Anthropic\'s servers for processing.',
             'Anthropic\'s data handling is governed by their own Privacy Policy at anthropic.com/privacy.',
