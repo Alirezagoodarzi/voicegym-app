@@ -31,6 +31,8 @@ workflows:
           echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
           keychain initialize
           keychain add-certificates --certificate /tmp/cert.p12 --certificate-password $CERTIFICATE_P12_PASSWORD
+          # Verify certificate was imported
+          security find-identity -v -p codesigning
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
           xcode-project use-profiles
