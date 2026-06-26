@@ -27,11 +27,10 @@ workflows:
           ls ios/App/
       - name: Set up code signing
         script: |
-          echo $CERTIFICATE | base64 --decode > /tmp/cert.cer
-          echo $CERTIFICATE_PRIVATE_KEY | base64 --decode > /tmp/key.pem
+          echo $CERTIFICATE_P12 | base64 --decode > /tmp/cert.p12
           echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
           keychain initialize
-          keychain add-certificates --certificate /tmp/cert.cer
+          keychain add-certificates --certificate /tmp/cert.p12 --certificate-password $CERTIFICATE_P12_PASSWORD
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
           xcode-project use-profiles
