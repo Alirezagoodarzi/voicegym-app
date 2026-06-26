@@ -21,9 +21,10 @@ workflows:
         script: npx cap sync ios
       - name: Install CocoaPods
         script: |
-          find . -name "Podfile" -not -path "*/node_modules/*"
-          cd ios/App/App
-          pod install
+          echo "Looking for Podfile..."
+          find . -name "Podfile" -not -path "*/node_modules/*" || echo "No Podfile found"
+          ls ios/
+          ls ios/App/
       - name: Set up code signing
         script: |
           echo $CERTIFICATE | base64 --decode > /tmp/cert.cer
