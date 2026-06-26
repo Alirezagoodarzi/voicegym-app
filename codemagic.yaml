@@ -9,7 +9,7 @@ workflows:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
         BUNDLE_ID: "com.alirezagoodarzi.voicegymplanner"
-      node: 18
+      node: 20
     scripts:
       - name: Install dependencies
         script: npm install
