@@ -8,10 +8,12 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.alirezagoodarzi.voicegymplanner
+        certificate: $CERTIFICATE
+        certificate_password: ""
+        provisioning_profile: $PROVISIONING_PROFILE
       vars:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
-        BUNDLE_ID: "com.alirezagoodarzi.voicegymplanner"
       node: 18
     scripts:
       - name: Install dependencies
@@ -26,20 +28,6 @@ workflows:
         script: |
           cd ios/App
           pod install
-      - name: Set up code signing
-        script: |
-          echo $CERTIFICATE | base64 --decode > /tmp/certificate.cer
-          echo $CERTIFICATE_PRIVATE_KEY | base64 --decode > /tmp/private.key
-          echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
-          
-          # Create keychain
-          keychain initialize
-          
-          # Import certificate
-          keychain add-certificates --certificate /tmp/certificate.cer --certificate-password ""
-          
-          # Add provisioning profile
-          xcode-project use-profiles --provisioning-profile /tmp/profile.mobileprovision
       - name: Build iOS
         script: |
           xcode-project build-ipa \
