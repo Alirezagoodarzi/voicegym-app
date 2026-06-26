@@ -32,7 +32,9 @@ workflows:
           echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
           keychain initialize
           keychain add-certificates --certificate /tmp/cert.cer
-          xcode-project use-profiles --provisioning-profile /tmp/profile.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          xcode-project use-profiles
       - name: Build iOS
         script: |
           xcode-project build-ipa \
