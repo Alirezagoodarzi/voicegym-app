@@ -19,7 +19,7 @@ workflows:
           npm run build
       - name: Sync Capacitor
         script: npx cap sync ios
--      name: Install CocoaPods
+      - name: Install CocoaPods
         script: |
           find . -name "Podfile" -not -path "*/node_modules/*"
           cd ios/App/App
