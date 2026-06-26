@@ -8,9 +8,6 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.alirezagoodarzi.voicegymplanner
-        certificate: $CERTIFICATE
-        certificate_password: ""
-        provisioning_profile: $PROVISIONING_PROFILE
       vars:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
@@ -28,6 +25,14 @@ workflows:
         script: |
           cd ios/App
           pod install
+      - name: Set up code signing
+        script: |
+          echo $CERTIFICATE | base64 --decode > /tmp/cert.cer
+          echo $CERTIFICATE_PRIVATE_KEY | base64 --decode > /tmp/key.pem
+          echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
+          keychain initialize
+          keychain add-certificates --certificate /tmp/cert.cer
+          xcode-project use-profiles --provisioning-profile /tmp/profile.mobileprovision
       - name: Build iOS
         script: |
           xcode-project build-ipa \
