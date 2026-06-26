@@ -35,19 +35,42 @@ workflows:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
           xcode-project use-profiles
+      - name: Create export options
+        script: |
+          cat > /tmp/exportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>teamID</key>
+            <string>SJLDSY6MKY</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>com.alirezagoodarzi.voicegymplanner</key>
+              <string>VoiceGymPlanner AppStore</string>
+            </dict>
+          </dict>
+          </plist>
+          EOF
       - name: Build iOS
         script: |
-          xcode-project build-ipa \
-            --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME" \
-            --config Release \
-            -- \
+          xcodebuild -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -configuration Release \
+            -archivePath /tmp/voicegym.xcarchive \
             CODE_SIGN_STYLE=Manual \
             PROVISIONING_PROFILE_SPECIFIER="VoiceGymPlanner AppStore" \
             CODE_SIGN_IDENTITY="Apple Distribution" \
-            DEVELOPMENT_TEAM="SJLDSY6MKY"
+            DEVELOPMENT_TEAM="SJLDSY6MKY" \
+            archive
+          xcodebuild -exportArchive \
+            -archivePath /tmp/voicegym.xcarchive \
+            -exportOptionsPlist /tmp/exportOptions.plist \
+            -exportPath /tmp/voicegym-ipa
     artifacts:
-      - build/ios/ipa/*.ipa
+      - /tmp/voicegym-ipa/*.ipa
     publishing:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
